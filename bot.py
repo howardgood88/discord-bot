@@ -6,7 +6,7 @@ import time
 from collections import OrderedDict
 import json
 
-token = 'NjAyNDI0ODUzNTcxNjk4Njk4.XTQtdA.JE0lXuUleJ1Z5fwlzFYZN3SyVMk'
+token = 'NjAyNDI0ODUzNTcxNjk4Njk4.XThbJA.pY0KXc6n1JTHm5nYCzhbH3Y6ObM'
 #channel_id = 602424106389864460 #test
 text_channel_id = 560861172648378391 #ours
 voice_channel_id = 560861172648378393 #ours
