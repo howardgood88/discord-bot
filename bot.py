@@ -6,7 +6,7 @@ import time
 from collections import OrderedDict
 import json
 
-token = 'NjAyNDI0ODUzNTcxNjk4Njk4.XThbJA.pY0KXc6n1JTHm5nYCzhbH3Y6ObM'
+token = 'NjAyNDI0ODUzNTcxNjk4Njk4.XThfVA.pOGWPMIdTs-G2H2bc2YPHOUwIiY'
 #channel_id = 602424106389864460 #test
 text_channel_id = 560861172648378391 #ours
 voice_channel_id = 560861172648378393 #ours
@@ -45,23 +45,26 @@ async def on_ready():
 @bot.event
 async def on_voice_state_update(member, before, after):
 	'''偵測channel的member變化'''
-	if after.channel!=None and tmp_dict[str(member.id)] == 0:
-		tmp_dict[str(member.id)] = time.time()
-		v_channel, t_channel = await get_channel()
-		print('I see you, {}.'.format(str(member)))
-		await t_channel.send('I see you, {}.'.format(str(member)))
+	try:
+		if after.channel!=None and tmp_dict[str(member.id)] == 0:
+			tmp_dict[str(member.id)] = time.time()
+			v_channel, t_channel = await get_channel()
+			print('I see you, {}.'.format(str(member)))
+			await t_channel.send('I see you, {}.'.format(str(member)))
 
-	elif after.channel==None and tmp_dict[str(member.id)] != 0:
-		get_point = int(time.time() - tmp_dict[str(member.id)])
-		online_dict[str(member.id)] += get_point
-		v_channel, t_channel = await get_channel()
-		print('Bye Bye, {}~, 時數累加{}小時{}分鐘'.format(
-			str(member), get_point/60//60, get_point//60%60))
-		await t_channel.send('Bye Bye, {}~, 時數累加 {}小時 {}分鐘'.format(
-			str(member), get_point/60//60, get_point//60%60))
-		with open('RC_info.txt', 'w') as f:
-			f.write(json.dumps(online_dict))
-		tmp_dict[str(member.id)] = 0
+		elif after.channel==None and tmp_dict[str(member.id)] != 0:
+			get_point = int(time.time() - tmp_dict[str(member.id)])
+			online_dict[str(member.id)] += get_point
+			v_channel, t_channel = await get_channel()
+			print('Bye Bye, {}~, 時數累加{}小時{}分鐘'.format(
+				str(member), get_point/60//60, get_point//60%60))
+			await t_channel.send('Bye Bye, {}~, 時數累加 {}小時 {}分鐘'.format(
+				str(member), get_point/60//60, get_point//60%60))
+			with open('RC_info.txt', 'w') as f:
+				f.write(json.dumps(online_dict))
+			tmp_dict[str(member.id)] = 0
+	except KeyError:
+		pass
 
 @bot.command()
 async def timer(ctx):
