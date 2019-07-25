@@ -6,7 +6,10 @@ import time
 from collections import OrderedDict
 import json
 
-token = 'NjAyNDI0ODUzNTcxNjk4Njk4.XTl7yQ.0L9Ct2gljqbfoYTfJ4NLQz6PPUo'
+with open('./config.txt') as f:
+	line = f.readlines()
+token = line[0]
+print(token)
 #channel_id = 602424106389864460 #test
 text_channel_id = 560861172648378391 #ours
 voice_channel_id = 560861172648378393 #ours
