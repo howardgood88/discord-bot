@@ -5,11 +5,9 @@ import random
 import time
 from collections import OrderedDict
 import json
+import os
 
-with open('./config.txt') as f:
-	line = f.readlines()
-token = line[0]
-print(token)
+token = os.environ['token']
 #channel_id = 602424106389864460 #test
 text_channel_id = 560861172648378391 #ours
 voice_channel_id = 560861172648378393 #ours
