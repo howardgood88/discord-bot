@@ -97,7 +97,6 @@ mpmath==1.0.0
 msgpack-python==0.5.6
 multidict==4.5.2
 multipledispatch==0.5.0
-navigator-updater==0.2.1
 nbconvert==5.3.1
 nbformat==4.4.0
 netmiko==2.3.3
