@@ -38,6 +38,8 @@ async def on_ready():
 	online_dict = OrderedDict()
 	for name, val in user:
 		online_dict[name] = val
+	v_channel, t_channel = await get_channel()
+	await t_channel.send('打ㄍㄟˊ賀\t挖來啊啦~')
 	print('------')
 	del user, name, val
 
