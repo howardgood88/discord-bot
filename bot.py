@@ -11,9 +11,7 @@ token = 'NjAyNDI0ODUzNTcxNjk4Njk4.XThgIQ._Z-hXBLpEFoaN9L0J0I4kuEf5QA'
 text_channel_id = 560861172648378391 #ours
 voice_channel_id = 560861172648378393 #ours
 
-description = '''An example bot to showcase the discord.ext.commands extension
-module.
-There are a number of utility commands being showcased here.'''
+description = '''online bot用法'''
 bot = commands.Bot(command_prefix='!', description=description)
 
 async def get_channel():
@@ -49,17 +47,17 @@ async def on_voice_state_update(member, before, after):
 		if after.channel!=None and tmp_dict[str(member.id)] == 0:
 			tmp_dict[str(member.id)] = time.time()
 			v_channel, t_channel = await get_channel()
-			print('I see you, {}.'.format(str(member)))
-			await t_channel.send('I see you, {}.'.format(str(member)))
+			print('I see you, {}.'.format(member.display_name))
+			await t_channel.send('I see you, {}.'.format(member.display_name))
 
 		elif after.channel==None and tmp_dict[str(member.id)] != 0:
 			get_point = int(time.time() - tmp_dict[str(member.id)])
 			online_dict[str(member.id)] += get_point
 			v_channel, t_channel = await get_channel()
-			print('Bye Bye, {}~, 時數累加{}小時{}分鐘'.format(
-				str(member), get_point/60//60, get_point//60%60))
-			await t_channel.send('Bye Bye, {}~, 時數累加 {}小時 {}分鐘'.format(
-				str(member), get_point/60//60, get_point//60%60))
+			print('Bye Bye, {}~, 時數累加 {:.0f}小時 {}分鐘'.format(
+				member.display_name, get_point/60//60, get_point//60%60))
+			await t_channel.send('Bye Bye, {}~, 時數累加 {:.0f}小時 {}分鐘'.format(
+				member.display_name, get_point/60//60, get_point//60%60))
 			with open('RC_info.txt', 'w') as f:
 				f.write(json.dumps(online_dict))
 			tmp_dict[str(member.id)] = 0
@@ -70,10 +68,12 @@ async def on_voice_state_update(member, before, after):
 async def timer(ctx):
 	"""print出貢獻值"""
 	msg = '累計貢獻值：\n\n'
+	guild_ = bot.get_guild(560861172648378389)
 	for key, val in online_dict.items():
-		user = str(bot.get_user(int(key)).name)
+		user = guild_.get_member(int(key)).display_name
 		days, hours, mins = int(val/60/60/24), int(val/60/60%24), int(val/60%60)
 		msg += '{:^10}\t\t{}天 {}小時 {}分\n'.format(user, days, hours, mins)
+	#print(msg)
 	await ctx.send(msg)
 
 @bot.command()
