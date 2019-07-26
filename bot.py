@@ -11,8 +11,19 @@ token = os.environ['token']
 #channel_id = 602424106389864460 #test
 text_channel_id = 560861172648378391 #ours
 voice_channel_id = 560861172648378393 #ours
+guild_id = 560861172648378389
 
-description = '''online bot用法'''
+description = '''
+online bot用法：\n
+onilne bot的前導符號為"!"，任何指令前面都須加上才能執行。\n\n
+
+online bot的功能：\n
+紀錄成員上線時間。只要成員上線後進入任意語音頻道，\n
+online bot會偵測到並回應"I see you, xxx"，這時上線時間已開始累計，\n
+並於下線時(離開此群組也算)結算時數\n\n
+
+online bot提供之指令列表：\n
+'''
 bot = commands.Bot(command_prefix='!', description=description)
 
 async def get_channel():
@@ -20,6 +31,14 @@ async def get_channel():
 	v_channel = await bot.fetch_channel(voice_channel_id)
 	t_channel = await bot.fetch_channel(text_channel_id)
 	return v_channel, t_channel
+
+async def dict_sorting(d):
+	d = [(x, int(y)) for x, y in d.items()]
+	d.sort(key=lambda s: s[1], reverse=True)
+	global online_dict
+	online_dict = OrderedDict()
+	for name, val in d:
+		online_dict[name] = val
 
 @bot.event
 async def on_ready():
@@ -30,14 +49,9 @@ async def on_ready():
 	print('Read online data')
 	with open('RC_info.txt', 'r') as f:
 		user = json.loads(f.read())
-		user = [(x, int(y)) for x, y in user.items()]
-		user.sort(key=lambda s: s[1], reverse=True)
+		await dict_sorting(user)
 	global tmp_dict
-	tmp_dict = {x: 0 for x, y in user}
-	global online_dict
-	online_dict = OrderedDict()
-	for name, val in user:
-		online_dict[name] = val
+	tmp_dict = {x: 0 for x, y in user.items()}
 	v_channel, t_channel = await get_channel()
 	await t_channel.send('打ㄍㄟˊ賀\t挖來啊啦~')
 	print('------')
@@ -56,6 +70,7 @@ async def on_voice_state_update(member, before, after):
 		elif after.channel==None and tmp_dict[str(member.id)] != 0:
 			get_point = int(time.time() - tmp_dict[str(member.id)])
 			online_dict[str(member.id)] += get_point
+			await dict_sorting(online_dict)
 			v_channel, t_channel = await get_channel()
 			print('Bye Bye, {}~, 時數累加 {:.0f}小時 {}分鐘'.format(
 				member.display_name, get_point/60//60, get_point//60%60))
@@ -69,9 +84,9 @@ async def on_voice_state_update(member, before, after):
 
 @bot.command()
 async def timer(ctx):
-	"""print出貢獻值"""
+	"""查看目前成員貢獻值排名"""
 	msg = '累計貢獻值：\n\n'
-	guild_ = bot.get_guild(560861172648378389)
+	guild_ = bot.get_guild(guild_id)
 	for key, val in online_dict.items():
 		user = guild_.get_member(int(key)).display_name
 		days, hours, mins = int(val/60/60/24), int(val/60/60%24), int(val/60%60)
@@ -81,7 +96,7 @@ async def timer(ctx):
 
 @bot.command()
 async def rc(ctx):
-	"""舊RC資訊"""
+	"""查看舊RC群組資訊"""
 	with open('RC_info_2.txt', 'r') as f:
 		info = f.readlines()[:-1]
 		msg = ''
