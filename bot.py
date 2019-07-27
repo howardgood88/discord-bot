@@ -55,7 +55,7 @@ async def on_ready():
 	v_channel, t_channel = await get_channel()
 	await t_channel.send('打ㄍㄟˊ賀\t挖來啊啦~')
 	print('------')
-	del user, name, val
+	del user
 
 @bot.event
 async def on_voice_state_update(member, before, after):
