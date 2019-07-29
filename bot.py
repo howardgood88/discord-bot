@@ -90,7 +90,7 @@ async def timer(ctx):
 	for key, val in online_dict.items():
 		user = guild_.get_member(int(key)).display_name
 		days, hours, mins, hours_ = int(val/60/60/24), int(val/60/60%24), int(val/60%60), int(val/60/60)
-		msg += '{:<10} {} ({}{}天 {}小時 {}分)\n'.format(user, '\t'*4, hours_, days, hours, mins)
+		msg += '{:<10} {}{} ({}天 {}小時 {}分)\n'.format(user, '\t'*4, hours_, days, hours, mins)
 	#print(msg)
 	await ctx.send(msg)
 
