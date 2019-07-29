@@ -65,7 +65,7 @@ async def on_voice_state_update(member, before, after):
 			tmp_dict[str(member.id)] = time.time()
 			v_channel, t_channel = await get_channel()
 			print('I see you, {}.'.format(member.display_name))
-			await t_channel.send('I see you, {}.'.format(member.display_name))
+			# await t_channel.send('I see you, {}.'.format(member.display_name))
 
 		elif after.channel==None and tmp_dict[str(member.id)] != 0:
 			get_point = int(time.time() - tmp_dict[str(member.id)])
@@ -74,8 +74,8 @@ async def on_voice_state_update(member, before, after):
 			v_channel, t_channel = await get_channel()
 			print('Bye Bye, {}~, 時數累加 {:.0f}小時 {}分鐘'.format(
 				member.display_name, get_point/60//60, get_point//60%60))
-			await t_channel.send('Bye Bye, {}~, 時數累加 {:.0f}小時 {}分鐘'.format(
-				member.display_name, get_point/60//60, get_point//60%60))
+			# await t_channel.send('Bye Bye, {}~, 時數累加 {:.0f}小時 {}分鐘'.format(
+			#	member.display_name, get_point/60//60, get_point//60%60))
 			with open('RC_info.txt', 'w') as f:
 				f.write(json.dumps(online_dict))
 			tmp_dict[str(member.id)] = 0
@@ -89,8 +89,8 @@ async def timer(ctx):
 	guild_ = bot.get_guild(guild_id)
 	for key, val in online_dict.items():
 		user = guild_.get_member(int(key)).display_name
-		days, hours, mins = int(val/60/60/24), int(val/60/60%24), int(val/60%60)
-		msg += '{:^10}\t\t{}天 {}小時 {}分\n'.format(user, days, hours, mins)
+		days, hours, mins, hours_ = int(val/60/60/24), int(val/60/60%24), int(val/60%60), int(val/60/60)
+		msg += '{} ({:<10}{}{}天 {}小時 {}分)\n'.format(hours_, user, '\t'*4, days, hours, mins)
 	#print(msg)
 	await ctx.send(msg)
 
