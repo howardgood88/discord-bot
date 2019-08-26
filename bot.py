@@ -52,8 +52,8 @@ async def on_ready():
 		await dict_sorting(user)
 	global tmp_dict
 	tmp_dict = {x: 0 for x, y in user.items()}
-	v_channel, t_channel = await get_channel()
-	await t_channel.send('打ㄍㄟˊ賀\t挖來啊啦~')
+	# v_channel, t_channel = await get_channel()
+	# await t_channel.send('打ㄍㄟˊ賀\t挖來啊啦~')
 	print('------')
 	del user
 
