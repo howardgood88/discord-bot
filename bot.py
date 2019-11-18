@@ -8,7 +8,7 @@ import json
 import os
 
 token = os.environ['token']
-#channel_id = 602424106389864460 #test
+#channel_id = 602424106389864460 #test.
 text_channel_id = 560861172648378391 #ours
 voice_channel_id = 560861172648378393 #ours
 guild_id = 560861172648378389
